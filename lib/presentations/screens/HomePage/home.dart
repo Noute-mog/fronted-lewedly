@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lewedly/busuness_logic/cubit/creersignalement_cubit.dart';
+import 'package:lewedly/data/networkService.dart';
+import 'package:lewedly/data/repository.dart';
 import 'package:lewedly/presentations/components/default_button.dart';
 import 'package:lewedly/presentations/components/signalement_item.dart';
 import 'package:lewedly/presentations/constants/constants.dart';
@@ -228,7 +232,14 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const AjouterSignalement()));
+                                builder: (_) => BlocProvider(
+                                      create: (context) =>
+                                          CreersignalementCubit(
+                                              repository: Repository(
+                                                  networkService:
+                                                      NetworkService())),
+                                      child: const AjouterSignalement(),
+                                    )));
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width / 2.3,

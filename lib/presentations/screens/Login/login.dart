@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lewedly/busuness_logic/cubit/auth_cubit.dart';
 import 'package:lewedly/presentations/components/default_button.dart';
 import 'package:lewedly/presentations/components/text_form_field.dart';
 import 'package:lewedly/presentations/constants/constants.dart';
@@ -117,15 +119,31 @@ class _LoginPageState extends State<LoginPage> {
                           obsecure: true,
                         ),
                         spaceLong(30),
-                        DefaultButton(
-                          onTap: () {
-                            Navigator.pushNamed(context, home);
+                        BlocConsumer<AuthCubit, AuthState>(
+                          listener: (context, state) {
+                            if (state is AuthLoded) {
+                              Navigator.pushNamed(context, home);
+                            }
                           },
-                          width: double.infinity,
-                          height: 45,
-                          text: 'Connexion',
-                          textcolor: whitecolor,
-                          color: primarycolor,
+                          builder: (context, state) {
+                            return state is AuthLoding
+                                ? const Center(child: CircularProgressIndicator(
+                                  color: primarycolor,
+                                ))
+                                : DefaultButton(
+                                    onTap: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        BlocProvider.of<AuthCubit>(context)
+                                                    .login(telephonecontroller.text, codecontroller.text, context);
+                                      }
+                                    },
+                                    width: double.infinity,
+                                    height: 45,
+                                    text: 'Connexion',
+                                    textcolor: whitecolor,
+                                    color: primarycolor,
+                                  );
+                          },
                         ),
                         spaceLong(20),
                         DefaultButton(

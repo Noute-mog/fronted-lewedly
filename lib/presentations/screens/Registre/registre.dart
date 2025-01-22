@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lewedly/busuness_logic/cubit/registre_cubit.dart';
 import 'package:lewedly/presentations/components/default_button.dart';
 import 'package:lewedly/presentations/components/text_form_field.dart';
 import 'package:lewedly/presentations/constants/constants.dart';
+import 'package:lewedly/presentations/constants/strings.dart';
 
 class Registre extends StatefulWidget {
   const Registre({Key? key}) : super(key: key);
@@ -14,7 +17,7 @@ class Registre extends StatefulWidget {
 class _RegistreState extends State<Registre> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nomController = TextEditingController();
-  TextEditingController nniController = TextEditingController();
+  TextEditingController prenomController = TextEditingController();
   TextEditingController codeController = TextEditingController();
   TextEditingController confirmeCodeController = TextEditingController();
   TextEditingController telephoneController = TextEditingController();
@@ -80,7 +83,7 @@ class _RegistreState extends State<Registre> {
                         ),
                         spaceLong(40),
                         Text(
-                          "Nom complet",
+                          "Nom",
                           style: textstyle.copyWith(
                               fontSize: (14),
                               fontWeight: FontWeight.w400,
@@ -99,7 +102,7 @@ class _RegistreState extends State<Registre> {
                         ),
                         spaceLong(18),
                         Text(
-                          "Numero national (nni)",
+                          "Prenom",
                           style: textstyle.copyWith(
                               fontSize: (14),
                               fontWeight: FontWeight.w400,
@@ -107,19 +110,19 @@ class _RegistreState extends State<Registre> {
                         ),
                         spaceLong(5),
                         TextFormInput(
-                          controller: nniController,
+                          controller: prenomController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'nni obligatoire';
+                              return 'Prenom obligatoire';
                             } else {
                               return null;
                             }
                           },
-                          maxLength: 10,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                          ],
-                          keyboardType: TextInputType.number,
+                          // maxLength: 10,
+                          // inputFormatters: [
+                          //   FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                          // ],
+                          keyboardType: TextInputType.text,
                         ),
                         Text(
                           "Numero de telephone",
@@ -178,6 +181,9 @@ class _RegistreState extends State<Registre> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Mot de passe obligatoire';
+                            } else if (codeController.text !=
+                                confirmeCodeController.text) {
+                              return 'les Mots de passe ne sont pas egaux';
                             } else {
                               return null;
                             }
@@ -186,13 +192,37 @@ class _RegistreState extends State<Registre> {
                           obsecure: true,
                         ),
                         spaceLong(30),
-                        DefaultButton(
-                          onTap: () {},
-                          width: double.infinity,
-                          height: 45,
-                          text: 'Creation',
-                          textcolor: whitecolor,
-                          color: primarycolor,
+                        BlocConsumer<RegistreCubit, RegistreState>(
+                          listener: (context, state) {
+                            if (state is RegistreLoded) {
+                              Navigator.pushNamed(context, loginPage);
+                            }
+                          },
+                          builder: (context, state) {
+                            return state is RegistreLoding
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                    color: primarycolor,
+                                  ))
+                                : DefaultButton(
+                                    onTap: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        BlocProvider.of<RegistreCubit>(context)
+                                            .registre(
+                                                nomController.text,
+                                                prenomController.text,
+                                                 telephoneController.text,
+                                                codeController.text,
+                                                context);
+                                      }
+                                    },
+                                    width: double.infinity,
+                                    height: 45,
+                                    text: 'Creation',
+                                    textcolor: whitecolor,
+                                    color: primarycolor,
+                                  );
+                          },
                         ),
                         spaceLong(30),
                       ],
