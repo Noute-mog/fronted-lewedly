@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lewedly/busuness_logic/cubit/creersignalement_cubit.dart';
+import 'package:lewedly/busuness_logic/cubit/malistsignalement_cubit.dart';
+import 'package:lewedly/busuness_logic/cubit/touslistsignalement_cubit.dart';
 import 'package:lewedly/data/networkService.dart';
 import 'package:lewedly/data/repository.dart';
 import 'package:lewedly/presentations/components/default_button.dart';
@@ -22,6 +25,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String name='';
+  String telephone='';
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetch();
+    BlocProvider.of<TouslistsignalementCubit>(context).touslistsignalement(context);
+  }
+  Future fetch()async{
+     final storage = FlutterSecureStorage();
+       String? frst_name = await storage.read(key: "first_name");
+       String? last_name = await storage.read(key: "last_name");
+       String? phone = await storage.read(key: "phone");
+       if(frst_name!=null && last_name!=null){
+       setState(() {
+         name= frst_name + last_name;
+       });
+       }
+        if(phone!=null){
+       setState(() {
+         telephone= phone;
+       });
+       }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Center(
                         child: Text(
-                          "Noute Mogueya",
+                          name,
                           style: textstyle.copyWith(
                               fontSize: (18),
                               fontWeight: FontWeight.w700,
@@ -189,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 spaceLong(5),
                                 Text(
-                                  "47 65 25 45",
+                                  telephone,
                                   style: textstyle.copyWith(
                                       fontSize: (16),
                                       fontWeight: FontWeight.w600,
@@ -274,7 +302,14 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const MesSignalements()));
+                                builder: (_) => BlocProvider(
+                                      create: (context) =>
+                                          MalistsignalementCubit(
+                                              repository: Repository(
+                                                  networkService:
+                                                      NetworkService())),
+                                      child: const MesSignalements(),
+                                    )));
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width / 2.3,
@@ -371,40 +406,54 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 spaceLong(20),
-                GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisExtent: (230),
-                            crossAxisSpacing: (8),
-                            mainAxisSpacing: (10)),
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return signalementItem(
-                        context: context,
-                        nom: data[index]['Nom'],
-                        telephone: data[index]['Telephone'].toString(),
-                        age: data[index]['Age'].toString(),
-                        location: data[index]['Location'],
-                        image: data[index]['Image'],
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => SignalementDetails(
-                                        nom: data[index]['Nom'],
-                                        telephone:
-                                            data[index]['Telephone'].toString(),
-                                        age: data[index]['Age'].toString(),
-                                        location: data[index]['Location'],
-                                        image: data[index]['Image'],
-                                        description: data[index]['Description'],
-                                      )));
-                        },
-                      );
-                    }),
+                BlocConsumer<TouslistsignalementCubit, TouslistsignalementState>(
+                  listener: (context, state) {
+                    // TODO: implement listener
+                  },
+                  builder: (context, state) {
+                    if (state is TouslistsignalementLoded)
+                    {
+                      return 
+                    GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisExtent: (230),
+                                crossAxisSpacing: (8),
+                                mainAxisSpacing: (10)),
+                        itemCount: state.listsignalement.length,
+                        itemBuilder: (context, index) {
+                          return signalementItem(
+                            context: context,
+                            nom: state.listsignalement[index].enfantNom,
+                            telephone: state.listsignalement[index].phoneNumber,
+                            age: state.listsignalement[index].enfantAge,
+                            location: state.listsignalement[index].adresse,
+                            image:state.listsignalement[index].enfantImage,
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => SignalementDetails(
+                                            nom: state.listsignalement[index].enfantNom,
+                            telephone: state.listsignalement[index].phoneNumber,
+                            age: state.listsignalement[index].enfantAge,
+                            location: state.listsignalement[index].adresse,
+                            image:state.listsignalement[index].enfantImage,
+                                            description: state.listsignalement[index].description,
+                                          )));
+                            },
+                          );
+                        });
+                 
+                    }
+                    else{
+                      return SizedBox(child: Center(child: CircularProgressIndicator()));
+                    }
+                  },
+                ),
                 spaceLong(15),
               ],
             ),

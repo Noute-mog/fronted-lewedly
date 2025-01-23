@@ -3,6 +3,7 @@
 
 import 'dart:io';
 
+import 'package:lewedly/data/model/signalement.dart';
 import 'package:lewedly/data/networkService.dart';
 
 class Repository {
@@ -21,5 +22,18 @@ Future<dynamic> registre(String nom,String pren, String num,String pwd) async {
  Future<dynamic> creerSignalement(String nom,String age, String adresse,File image,String description) async {
     final response = await networkService!.creerSignalement( nom,  age, adresse, image,description);
     return response;
+  }
+
+  Future<List<Signalement>> malisteSignalement() async {
+    final response = await networkService!.malisteSignalement();
+    List<dynamic> responseJson= response["data"];
+    return responseJson.map((json) => Signalement.fromJson(json)).toList();
+    
+  }
+  Future<List<Signalement>> touslisteSignalement() async {
+    final response = await networkService!.touslisteSignalement();
+     List<dynamic> responseJson = response["data"];
+    return responseJson.map((json) => Signalement.fromJson(json)).toList();
+    
   }
 }

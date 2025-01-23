@@ -10,7 +10,7 @@ import 'package:lewedly/data/exceptions.dart';
 class NetworkService {
   final storage = FlutterSecureStorage();
   int timeout = 60;
- var BaseApi="http://192.168.192.152:8000/userauth";
+ var BaseApi="http://192.168.241.152:8000/userauth";
  dynamic _response(Response response) {
     switch (response.statusCode) {
       case 200:
@@ -181,6 +181,95 @@ class NetworkService {
     return responseJson;
   }
 
+
+
+Future<dynamic> malisteSignalement() async {
+   String? token = await storage.read(key: "access");
+    dynamic responseJson;
+    try {
+      print("creer client");
+
+      var response = await http
+          .get(
+            Uri.parse('$BaseApi/maListSignalement/'),
+            headers: {'Content-Type': 'application/json', 'Authorization' : 'Bearer $token'},
+           
+          )
+          .timeout(const Duration(seconds: 60));
+      print(response.statusCode);
+      print(response.body);
+
+      responseJson = _response(response);
+    } on BadRequestException {
+      print("bad 400");
+      throw Failure();
+    } on TimeoutException {
+      print("timeout");
+      throw Failure();
+    } on SocketException catch (e) {
+      print("Socket");
+      throw Failure();
+    } on ClientException catch (e) {
+      print("ClientException ");
+      throw Failure();
+    } on UnauthorisedException {
+      print("401-3");
+      throw Failure(code: 1);
+    } on NotFoundException {
+      print("404");
+      throw Failure();
+    } on FetchDataException {
+      print("FetchData");
+      throw Failure(message: "Erreur fetch data:");
+    }
+
+    return responseJson;
+  }
+
+Future<dynamic> touslisteSignalement() async {
+  String? token = await storage.read(key: "access");
+    dynamic responseJson;
+    try {
+      print("creer client");
+
+      var response = await http
+          .get(
+            Uri.parse('$BaseApi/tousListSignalement/'),
+            headers: {'Content-Type': 'application/json',
+            'Authorization' : 'Bearer $token'
+            },
+           
+          )
+          .timeout(const Duration(seconds: 60));
+      print(response.statusCode);
+      print(response.body);
+
+      responseJson = _response(response);
+    } on BadRequestException {
+      print("bad 400");
+      throw Failure();
+    } on TimeoutException {
+      print("timeout");
+      throw Failure();
+    } on SocketException catch (e) {
+      print("Socket");
+      throw Failure();
+    } on ClientException catch (e) {
+      print("ClientException ");
+      throw Failure();
+    } on UnauthorisedException {
+      print("401-3");
+      throw Failure(code: 1);
+    } on NotFoundException {
+      print("404");
+      throw Failure();
+    } on FetchDataException {
+      print("FetchData");
+      throw Failure(message: "Erreur fetch data:");
+    }
+
+    return responseJson;
+  }
  }
  
  

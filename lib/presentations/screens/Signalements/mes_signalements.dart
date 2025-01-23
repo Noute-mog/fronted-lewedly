@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lewedly/busuness_logic/cubit/malistsignalement_cubit.dart';
 import 'package:lewedly/presentations/components/ma_signalement_item.dart';
 import 'package:lewedly/presentations/components/signalement_item.dart';
 import 'package:lewedly/presentations/constants/constants.dart';
@@ -13,6 +15,13 @@ class MesSignalements extends StatefulWidget {
 }
 
 class _MesSignalementsState extends State<MesSignalements> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<MalistsignalementCubit>(context).Malistsignalement(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,34 +74,50 @@ class _MesSignalementsState extends State<MesSignalements> {
                     color: pdarkcolor),
               ),
               spaceLong(20),
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return monSignalementItem(
-                      context: context,
-                      nom: data[index]['Nom'],
-                      telephone: data[index]['Telephone'].toString(),
-                      age: data[index]['Age'].toString(),
-                      location: data[index]['Location'],
-                      image: data[index]['Image'],
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => SignalementDetails(
-                                      nom: data[index]['Nom'],
-                                      telephone:
-                                          data[index]['Telephone'].toString(),
-                                      age: data[index]['Age'].toString(),
-                                      location: data[index]['Location'],
-                                      image: data[index]['Image'],
-                                      description: data[index]['Description'],
-                                    )));
-                      },
-                    );
-                  }),
+              BlocConsumer<MalistsignalementCubit, MalistsignalementState>(
+                listener: (context, state) {
+                  // TODO: implement listener
+                },
+                builder: (context, state) {
+                  
+                  if(state is MalistsignalementLoded){
+                    return  ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.listsignalement.length,
+                      itemBuilder: (context, index) {
+                        return monSignalementItem(
+                          context: context,
+                          nom: state.listsignalement[index].enfantNom,
+                          telephone: state.listsignalement[index].phoneNumber,
+                          age: state.listsignalement[index].enfantAge,
+                          location: state.listsignalement[index].adresse,
+                          image: state.listsignalement[index].enfantImage,
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => SignalementDetails(
+                                          nom: state.listsignalement[index].enfantNom,
+                                          telephone: state.listsignalement[index].phoneNumber,
+                                          age: state.listsignalement[index].enfantAge,
+                                          location: state.listsignalement[index].adresse,
+                                          image: state.listsignalement[index].enfantImage,
+                                          description: state.listsignalement[index].description,
+                                        )));
+                          },
+                        );
+                      });
+               
+                  }
+                  else{
+                    return  Container(
+                      width: 100,
+                      height: 100,
+                      child: const Center(child:  CircularProgressIndicator()));
+                  }
+                   },
+              ),
               spaceLong(15),
             ],
           ),
