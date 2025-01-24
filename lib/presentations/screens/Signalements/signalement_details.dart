@@ -146,7 +146,7 @@ class _SignalementDetailsState extends State<SignalementDetails> {
                   ),
                   spaceLong(10),
                   Text(
-                    "Description",
+                    "Status",
                     style: textstyle.copyWith(
                         fontSize: (16),
                         fontWeight: FontWeight.w500,
@@ -239,28 +239,29 @@ class _SignalementDetailsState extends State<SignalementDetails> {
                 ],
               ),
               spaceLong(20),
-              Text(
-                "Contactez la police",
-                style: textstyle.copyWith(
-                    fontSize: (20),
-                    fontWeight: FontWeight.w700,
-                    color: blackcolor),
-              ),
-              spaceLong(18),
-              DefaultButton(
-                onTap: () {},
-                color: primarycolor,
-                text: "Police",
-                textcolor: whitecolor,
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Icon(
-                    Icons.phone,
-                    size: 20,
-                    color: whitecolor,
-                  ),
-                ),
-              ),
+              // Text(
+              //   "Contactez la police",
+              //   style: textstyle.copyWith(
+              //       fontSize: (20),
+              //       fontWeight: FontWeight.w700,
+              //       color: blackcolor),
+              // ),
+              // spaceLong(18),
+              // DefaultButton(
+              //   onTap: () {},
+              //   color: primarycolor,
+              //   text: "Police",
+              //   textcolor: whitecolor,
+              //   prefixIcon: Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 6),
+              //     child: Icon(
+              //       Icons.phone,
+              //       size: 20,
+              //       color: whitecolor,
+              //     ),
+              //   ),
+              // ),
+           
             ],
           ),
         ),

@@ -5,6 +5,7 @@ class Signalement {
   final String phoneNumber;
   final String adresse;
   final String description;
+  final String status;
   Signalement({
     required this.enfantImage,
     required this.enfantNom,
@@ -12,6 +13,7 @@ class Signalement {
     required this.phoneNumber,
     required this.adresse,
     required this.description,
+    required this.status,
   });
 
   // Méthode pour créer une instance de Signalement à partir d'un JSON
@@ -22,7 +24,8 @@ class Signalement {
       enfantAge: json['enfant_age'],
       phoneNumber: json['phone_number'],
       adresse: json['adresse'],
-      description:json['description']
+      description:json['description'],
+      status:json['status']
     );
   }
 

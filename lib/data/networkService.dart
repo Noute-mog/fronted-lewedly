@@ -10,7 +10,7 @@ import 'package:lewedly/data/exceptions.dart';
 class NetworkService {
   final storage = FlutterSecureStorage();
   int timeout = 60;
- var BaseApi="http://192.168.241.152:8000/userauth";
+ var BaseApi="http://192.168.1.123:8000/userauth";
  dynamic _response(Response response) {
     switch (response.statusCode) {
       case 200:

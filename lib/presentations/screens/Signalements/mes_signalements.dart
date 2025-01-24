@@ -79,44 +79,50 @@ class _MesSignalementsState extends State<MesSignalements> {
                   // TODO: implement listener
                 },
                 builder: (context, state) {
-                  
-                  if(state is MalistsignalementLoded){
-                    return  ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: state.listsignalement.length,
-                      itemBuilder: (context, index) {
-                        return monSignalementItem(
-                          context: context,
-                          nom: state.listsignalement[index].enfantNom,
-                          telephone: state.listsignalement[index].phoneNumber,
-                          age: state.listsignalement[index].enfantAge,
-                          location: state.listsignalement[index].adresse,
-                          image: state.listsignalement[index].enfantImage,
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => SignalementDetails(
-                                          nom: state.listsignalement[index].enfantNom,
-                                          telephone: state.listsignalement[index].phoneNumber,
-                                          age: state.listsignalement[index].enfantAge,
-                                          location: state.listsignalement[index].adresse,
-                                          image: state.listsignalement[index].enfantImage,
-                                          description: state.listsignalement[index].description,
-                                        )));
-                          },
-                        );
-                      });
-               
+                  if (state is MalistsignalementLoded) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.listsignalement.length,
+                        itemBuilder: (context, index) {
+                          return monSignalementItem(
+                            context: context,
+                            nom: state.listsignalement[index].enfantNom,
+                            telephone: state.listsignalement[index].phoneNumber,
+                            age: state.listsignalement[index].enfantAge,
+                            location: state.listsignalement[index].adresse,
+                            image: state.listsignalement[index].enfantImage,
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => SignalementDetails(
+                                            nom: state.listsignalement[index]
+                                                .enfantNom,
+                                            telephone: state
+                                                .listsignalement[index]
+                                                .phoneNumber,
+                                            age: state.listsignalement[index]
+                                                .enfantAge,
+                                            location: state
+                                                .listsignalement[index].adresse,
+                                            image: state.listsignalement[index]
+                                                .enfantImage,
+                                            description: state
+                                                .listsignalement[index]
+                                                .status,
+                                          )));
+                            },
+                          );
+                        });
+                  } else {
+                    return Container(
+                        width: 100,
+                        height: 100,
+                        child:
+                            const Center(child: CircularProgressIndicator()));
                   }
-                  else{
-                    return  Container(
-                      width: 100,
-                      height: 100,
-                      child: const Center(child:  CircularProgressIndicator()));
-                  }
-                   },
+                },
               ),
               spaceLong(15),
             ],

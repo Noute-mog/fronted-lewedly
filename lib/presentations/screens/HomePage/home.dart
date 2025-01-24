@@ -205,17 +205,40 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                                
+                            //   ],
+                            // ),
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Text(
+                            //       "Numero national",
+                            //       style: textstyle.copyWith(
+                            //           fontSize: (14),
+                            //           fontWeight: FontWeight.w400,
+                            //           color: whitecolor),
+                            //     ),
+                            //     spaceLong(5),
+                            //     Text(
+                            //       "92 11 23 45 67",
+                            //       style: textstyle.copyWith(
+                            //           fontSize: (16),
+                            //           fontWeight: FontWeight.w600,
+                            //           color: whitecolor),
+                            //     ),
+                            //   ],
+                            // ),
+                          Text(
                                   "Telephone",
                                   style: textstyle.copyWith(
                                       fontSize: (14),
                                       fontWeight: FontWeight.w400,
                                       color: whitecolor),
                                 ),
-                                spaceLong(5),
+                                // spaceLong(5),
                                 Text(
                                   telephone,
                                   style: textstyle.copyWith(
@@ -223,28 +246,6 @@ class _HomePageState extends State<HomePage> {
                                       fontWeight: FontWeight.w600,
                                       color: whitecolor),
                                 ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Numero national",
-                                  style: textstyle.copyWith(
-                                      fontSize: (14),
-                                      fontWeight: FontWeight.w400,
-                                      color: whitecolor),
-                                ),
-                                spaceLong(5),
-                                Text(
-                                  "92 11 23 45 67",
-                                  style: textstyle.copyWith(
-                                      fontSize: (16),
-                                      fontWeight: FontWeight.w600,
-                                      color: whitecolor),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       )
@@ -425,7 +426,8 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisSpacing: (10)),
                         itemCount: state.listsignalement.length,
                         itemBuilder: (context, index) {
-                          return signalementItem(
+                          return 
+                          signalementItem(
                             context: context,
                             nom: state.listsignalement[index].enfantNom,
                             telephone: state.listsignalement[index].phoneNumber,
@@ -442,7 +444,7 @@ class _HomePageState extends State<HomePage> {
                             age: state.listsignalement[index].enfantAge,
                             location: state.listsignalement[index].adresse,
                             image:state.listsignalement[index].enfantImage,
-                                            description: state.listsignalement[index].description,
+                                            description: state.listsignalement[index].status,
                                           )));
                             },
                           );

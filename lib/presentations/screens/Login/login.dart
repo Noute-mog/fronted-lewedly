@@ -124,17 +124,37 @@ class _LoginPageState extends State<LoginPage> {
                             if (state is AuthLoded) {
                               Navigator.pushNamed(context, home);
                             }
+                            if (state is Autherror) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.red,
+                                content: Text("Identifiants de connexion invalides!"),
+                                duration:
+                                    Duration(seconds: 4),
+                                     // Durée d'affichage
+                                // action: SnackBarAction(
+                                //   label: "Fermer",
+                                //   onPressed: () {
+                                //     // Action lorsqu'on appuie sur "Fermer"
+                                //     ScaffoldMessenger.of(context)
+                                //         .hideCurrentSnackBar();
+                                //   },
+                                // ),
+                              ));
+                            }
                           },
                           builder: (context, state) {
                             return state is AuthLoding
-                                ? const Center(child: CircularProgressIndicator(
-                                  color: primarycolor,
-                                ))
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                    color: primarycolor,
+                                  ))
                                 : DefaultButton(
                                     onTap: () {
                                       if (_formKey.currentState!.validate()) {
                                         BlocProvider.of<AuthCubit>(context)
-                                                    .login(telephonecontroller.text, codecontroller.text, context);
+                                            .login(telephonecontroller.text,
+                                                codecontroller.text, context);
                                       }
                                     },
                                     width: double.infinity,
